@@ -30,14 +30,10 @@ http.get("http://localhost/imagine/nms-config.js", (response) => {
     NMSConfig = JSON.parse(rows.join('\n'));
     console.log('Reading data from NMSConfig file of Imagine server:', NMSConfig);
 
-    let host = NMSConfig.networkID + NMSConfig.hostID;
+    // let host = NMSConfig.networkID + NMSConfig.hostID;
     let port = NMSConfig.nmsProxyPort;
 
-    // Double proxy
-    // Listening on ip nr from NMSConfig file from the webserver, to be able to run remote Imagine clients. 
-    // And on localhost. 
-    init(host, port);
-    init('localhost', port);
+    init(port);
 
   });
 
@@ -48,7 +44,7 @@ http.get("http://localhost/imagine/nms-config.js", (response) => {
 
 
 
-function init(host, port) {
+function init(port) {
   // Grab the blacklist from the command-line so that we can update the blacklist without deploying
   // again. CORS Anywhere is open by design, and this blacklist is not used, except for countering
   // immediate abuse (e.g. denial of service). If you want to block all origins except for some,
@@ -91,8 +87,8 @@ function init(host, port) {
       xfwd: false,
       secure: false, 
     },
-  }).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
+  }).listen(port, function() {
+    console.log('Running CORS Anywhere on port:' + port);
   });
 }
 
